@@ -4,6 +4,7 @@ import java.util.*;
 
 
 public class WeightedGraph extends Graph {
+    public final static int INFINITY = 9999;
 
     public WeightedGraph(int numOfNodes, int[][] adjMatrix) {
 
@@ -63,5 +64,40 @@ public class WeightedGraph extends Graph {
         }
 
         return distances;
+    }
+
+    // Calculates the shortest distance between every pair of vertices using Floyd Warshall's algorithm
+    // Time complexity of the Floyd Warshall's algo: O(V^3)
+    public int[][] calculateShortestDistanceBetweenAllPairs() {
+
+        int[][] shortestDistances = new int[this.getNumOfNodes()][this.getNumOfNodes()];
+
+        // initializing shortestDistances array
+        for (int i = 0; i < this.getNumOfNodes(); i++) {
+            for (int j = 0; j < this.getNumOfNodes(); j++) {
+
+                if (i == j) {
+                    shortestDistances[i][j] = 0;
+                }else if (!this.containsEdgeBetweenVertices(i, j)) {
+                    shortestDistances[i][j] = WeightedGraph.INFINITY;
+                } else {
+                    shortestDistances[i][j] = this.getDistanceBetweenVertices(i, j);
+                }
+            }
+        }
+
+        // Applying Floyd Warshall's Algo
+        for (int k = 0; k < this.getNumOfNodes(); k++) {
+            for (int i = 0; i < this.getNumOfNodes(); i++) {
+                for (int j = 0; j < this.getNumOfNodes(); j++) {
+
+                    if (shortestDistances[i][k] + shortestDistances[k][j] < shortestDistances[i][j]) {
+                         shortestDistances[i][j] = shortestDistances[i][k] + shortestDistances[k][j];
+                    }
+                }
+            }
+        }
+
+        return shortestDistances;
     }
 }
