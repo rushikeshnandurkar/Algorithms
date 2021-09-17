@@ -100,4 +100,45 @@ public class WeightedGraph extends Graph {
 
         return shortestDistances;
     }
+
+    // Implementation of Prims Algorithm
+    public int[] primsAlgoToFindMST() {
+
+        int[] parent = new int[this.getNumOfNodes()];
+        parent[0] = -1;
+
+        Set<Integer> mstSet = new HashSet<>();
+        int[] values = new int[this.getNumOfNodes()];
+        for (int i = 0; i < this.getNumOfNodes(); i++) {
+            values[i] = Integer.MAX_VALUE;
+        }
+        values[0] = 0;
+
+        while (mstSet.size() < this.getNumOfNodes()) {
+
+            int u = -1;
+            int min = Integer.MAX_VALUE;
+            for (int i = 0; i < this.getNumOfNodes(); i++) {
+                if (!mstSet.contains(i) && values[i] < min) {
+                    min = values[i];
+                    u = i;
+                }
+            }
+            mstSet.add(u);
+            for (int v: this.getNeighbors(u)) {
+
+                if (!mstSet.contains(v) && this.getDistanceBetweenVertices(u, v) < values[v]) {
+                    parent[v] = u;
+                    values[v] = this.getDistanceBetweenVertices(u, v);
+                }
+            }
+        }
+        return parent;
+    }
+
+    public void printPrimsMST() {
+        int[] parent = this.primsAlgoToFindMST();
+        for (int i = 1; i < this.getNumOfNodes(); i++)
+            System.out.println(parent[i] + " - " + i + "\t" + this.getDistanceBetweenVertices(i, parent[i]));
+    }
 }
