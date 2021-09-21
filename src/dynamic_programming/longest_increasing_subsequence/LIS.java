@@ -1,4 +1,4 @@
-package dynamic_programming.longest_common_substring;
+package dynamic_programming.longest_increasing_subsequence;
 
 public class LIS {
 
